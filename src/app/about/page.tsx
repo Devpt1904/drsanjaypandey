@@ -1,25 +1,59 @@
+"use client";
+
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import anime from "animejs";
+import { useEffect, useRef } from "react";
+import { useAnimeInView } from "@/hooks/useAnimeInView";
 
 export default function AboutPage() {
+  const heroRef = useRef<HTMLElement>(null);
+  const { ref: contentRef, isInView: contentInView } = useAnimeInView<HTMLElement>({ threshold: 0.1 });
+
+  useEffect(() => {
+    // Hero Entrance
+    anime.timeline({ easing: 'spring(1, 80, 10, 0)' })
+      .add({
+        targets: '.about-hero-stagger',
+        opacity: [0, 1],
+        translateY: [30, 0],
+        delay: anime.stagger(150),
+        duration: 800
+      });
+  }, []);
+
+  useEffect(() => {
+    // Content scroll entrance
+    if (contentInView) {
+      anime({
+        targets: '.about-content-stagger',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        delay: anime.stagger(100),
+        easing: 'easeOutQuart',
+        duration: 800
+      });
+    }
+  }, [contentInView]);
+
   return (
     <>
       <Header />
       <main className="flex-1 w-full bg-white">
         {/* Editorial Hero */}
-        <section className="bg-navy text-white py-32 md:py-48 relative overflow-hidden">
+        <section ref={heroRef} className="bg-navy text-white py-24 md:py-48 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-          <div className="mx-auto max-w-[1200px] px-8 relative z-10 flex flex-col md:flex-row gap-16 items-center">
+          <div className="mx-auto max-w-[1200px] px-6 md:px-8 relative z-10 flex flex-col md:flex-row gap-8 md:gap-16 items-start md:items-center">
             <div className="flex-1">
-              <span className="text-[10px] uppercase tracking-[0.2em] text-white/50 font-semibold mb-6 block">
+              <span className="about-hero-stagger opacity-0 text-[10px] uppercase tracking-[0.2em] text-white/50 font-semibold mb-4 md:mb-6 block">
                 The Surgeon
               </span>
-              <h1 className="font-serif text-5xl md:text-7xl text-white mb-8 leading-[1.1]">
+              <h1 className="about-hero-stagger opacity-0 font-serif text-4xl md:text-5xl lg:text-7xl text-white mb-6 md:mb-8 leading-[1.1]">
                 Mastery Through <br className="hidden md:block"/> Relentless Pursuit.
               </h1>
             </div>
-            <div className="flex-1 md:pl-16 md:border-l border-white/10">
-              <p className="text-xl text-white/80 leading-relaxed font-light">
+            <div className="flex-1 md:pl-16 md:border-l border-white/10 pt-6 md:pt-0 border-t md:border-t-0">
+              <p className="about-hero-stagger opacity-0 text-lg md:text-xl text-white/80 leading-relaxed font-light">
                 With over 25 years of experience spanning leading academic institutions and global fellowships, Dr. Pandey offers a sovereign approach to complex medical care.
               </p>
             </div>
@@ -27,18 +61,18 @@ export default function AboutPage() {
         </section>
 
         {/* Philosophy & Timeline */}
-        <section className="py-24 md:py-32">
-          <div className="mx-auto max-w-[1200px] px-8 grid grid-cols-1 lg:grid-cols-12 gap-16">
+        <section ref={contentRef} className="py-16 md:py-32">
+          <div className="mx-auto max-w-[1200px] px-6 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
             
             {/* Left Column: Philosophy */}
             <div className="lg:col-span-7 pr-0 md:pr-12">
-              <span className="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-semibold mb-6 block">
+              <span className="about-content-stagger opacity-0 text-[10px] uppercase tracking-[0.2em] text-slate-400 font-semibold mb-6 block">
                 Professional Philosophy
               </span>
-              <h2 className="font-serif text-3xl md:text-4xl text-navy mb-8 leading-tight">
+              <h2 className="about-content-stagger opacity-0 font-serif text-3xl md:text-4xl text-navy mb-8 leading-tight">
                 "Mastery in surgery is an ongoing pursuit of precision. We view each patient as an individual with unique physiological architecture."
               </h2>
-              <div className="space-y-6 text-slate-600 leading-relaxed font-light">
+              <div className="about-content-stagger opacity-0 space-y-6 text-slate-600 leading-relaxed font-light">
                 <p>
                   Having completed over 250 Complex Reconstructive procedures and pioneering Gender Reassignment surgery in India, my philosophy is rooted in restoring dignity and function through meticulous surgical craft.
                 </p>
@@ -50,7 +84,7 @@ export default function AboutPage() {
             
             {/* Right Column: Experience */}
             <div className="lg:col-span-5 space-y-12">
-              <div className="bg-slate-50 p-12 border border-slate-100">
+              <div className="about-content-stagger opacity-0 bg-slate-50 p-12 border border-slate-100">
                 <h3 className="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-semibold mb-10">
                   Career Trajectory
                 </h3>
@@ -68,7 +102,7 @@ export default function AboutPage() {
                 </div>
               </div>
 
-              <div className="bg-navy p-12 text-white">
+              <div className="about-content-stagger opacity-0 bg-navy p-12 text-white">
                 <h3 className="text-[10px] uppercase tracking-[0.2em] text-white/50 font-semibold mb-10">
                   Global Fellowships
                 </h3>

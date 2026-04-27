@@ -1,7 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
+import anime from "animejs";
 import Link from "next/link";
+import { useEffect } from "react";
+import { useAnimeInView } from "../hooks/useAnimeInView";
 
 const focuses = [
   { num: "01", title: "Reconstructive Urology", slug: "reconstructive-urology", desc: "Complex urethral strictures, pelvic trauma reconstruction, and revision surgeries with precision." },
@@ -10,30 +12,46 @@ const focuses = [
 ];
 
 export function ClinicalFocus() {
+  const { ref, isInView } = useAnimeInView<HTMLDivElement>({ threshold: 0.1 });
+
+  useEffect(() => {
+    if (isInView) {
+      const tl = anime.timeline({
+        easing: 'spring(1, 80, 10, 0)'
+      });
+
+      tl.add({
+        targets: '.clinical-header',
+        opacity: [0, 1],
+        translateY: [20, 0],
+        duration: 800
+      })
+      .add({
+        targets: '.clinical-card',
+        opacity: [0, 1],
+        translateY: [30, 0],
+        delay: anime.stagger(150)
+      }, '-=600');
+    }
+  }, [isInView]);
+
   return (
-    <section className="py-24 md:py-32" id="excellence">
+    <section ref={ref} className="py-24 md:py-32" id="excellence">
       <div className="mx-auto max-w-[1200px] px-8">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-20 flex flex-col items-start border-b border-slate-100 pb-8"
+        <div 
+          className="clinical-header opacity-0 mb-20 flex flex-col items-start border-b border-slate-100 pb-8"
         >
           <span className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
             Specializations
           </span>
           <h2 className="font-serif text-4xl text-navy md:text-5xl">Clinical Focus</h2>
-        </motion.div>
+        </div>
         
         <div className="grid gap-6 md:grid-cols-3">
           {focuses.map((item, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.15, duration: 0.6 }}
-              className="group flex flex-col border border-slate-100 bg-white p-12 transition-all duration-300 hover:border-navy hover:shadow-2xl hover:shadow-navy/5 relative overflow-hidden"
+              className="clinical-card opacity-0 group flex flex-col border border-slate-100 bg-white p-12 transition-all duration-300 hover:border-navy hover:shadow-2xl hover:shadow-navy/5 relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 p-8">
                 <span className="font-serif text-6xl italic text-slate-50 transition-colors duration-500 group-hover:text-navy/5">
@@ -50,7 +68,7 @@ export function ClinicalFocus() {
                   <span className="h-[1px] w-4 bg-navy transition-all group-hover/btn:w-8" />
                 </Link>
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

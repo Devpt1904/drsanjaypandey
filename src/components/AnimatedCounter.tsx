@@ -1,7 +1,8 @@
 "use client";
 
-import { motion, useInView, useSpring, useTransform } from "framer-motion";
-import { useEffect, useRef } from "react";
+import anime from "animejs";
+import { useEffect, useState } from "react";
+import { useAnimeInView } from "../hooks/useAnimeInView";
 
 interface AnimatedCounterProps {
   value: number;
@@ -11,29 +12,29 @@ interface AnimatedCounterProps {
 }
 
 export function AnimatedCounter({ value, label, suffix = "", dark = false }: AnimatedCounterProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
-  
-  const springValue = useSpring(0, {
-    stiffness: 50,
-    damping: 20,
-    mass: 1,
-  });
-
-  const displayValue = useTransform(springValue, (current) => 
-    Math.floor(current).toString()
-  );
+  const { ref, isInView } = useAnimeInView<HTMLDivElement>({ threshold: 0.5 });
+  const [displayValue, setDisplayValue] = useState("0");
 
   useEffect(() => {
     if (isInView) {
-      springValue.set(value);
+      const obj = { val: 0 };
+      anime({
+        targets: obj,
+        val: value,
+        round: 1,
+        easing: 'easeOutExpo',
+        duration: 2000,
+        update: () => {
+          setDisplayValue(obj.val.toString());
+        }
+      });
     }
-  }, [isInView, value, springValue]);
+  }, [isInView, value]);
 
   return (
     <div ref={ref} className="flex flex-col items-start">
       <div className={`flex items-baseline font-serif ${dark ? 'text-white' : 'text-navy'}`}>
-        <motion.span className="text-4xl md:text-5xl">{displayValue}</motion.span>
+        <span className="text-4xl md:text-5xl">{displayValue}</span>
         {suffix && <span className="text-3xl md:text-4xl ml-1">{suffix}</span>}
       </div>
       <span className={`text-[10px] uppercase tracking-widest mt-2 font-semibold ${dark ? 'text-white/50' : 'text-slate-400'}`}>

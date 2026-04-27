@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef, useEffect } from "react";
+import anime from "animejs";
 import { ChevronRight, ChevronLeft, UploadCloud, CheckCircle2, Loader2, AlertCircle } from "lucide-react";
 
 type PatientStatus = "New" | "Returning" | null;
@@ -21,6 +21,48 @@ export function TriageForm() {
   const [error, setError] = useState<string | null>(null);
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const stepContainerRef = useRef<HTMLDivElement>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (progressBarRef.current) {
+      anime({
+        targets: progressBarRef.current,
+        width: `${(step / 4) * 100}%`,
+        duration: 300,
+        easing: 'easeOutQuad'
+      });
+    }
+    
+    if (stepContainerRef.current && !isSuccess) {
+      anime({
+        targets: stepContainerRef.current,
+        opacity: [0, 1],
+        translateX: [20, 0],
+        duration: 400,
+        easing: 'easeOutCubic'
+      });
+    }
+  }, [step, isSuccess]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      const tl = anime.timeline({ easing: 'spring(1, 80, 10, 0)' });
+      tl.add({
+        targets: '.success-icon',
+        scale: [0.8, 1],
+        opacity: [0, 1],
+        duration: 600
+      })
+      .add({
+        targets: '.success-text',
+        opacity: [0, 1],
+        translateY: [10, 0],
+        delay: anime.stagger(100),
+        duration: 600
+      }, '-=400');
+    }
+  }, [isSuccess]);
 
   const handleNext = () => setStep((s) => s + 1);
   const handleBack = () => setStep((s) => Math.max(1, s - 1));
@@ -66,38 +108,27 @@ export function TriageForm() {
   if (isSuccess) {
     return (
       <div className="w-full max-w-xl mx-auto bg-white p-12 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05)] border border-slate-100/50 rounded-sm text-center">
-        <motion.div 
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          className="h-16 w-16 bg-navy/5 rounded-full flex items-center justify-center mx-auto mb-6"
+        <div 
+          className="success-icon opacity-0 h-16 w-16 bg-navy/5 rounded-full flex items-center justify-center mx-auto mb-6"
         >
           <CheckCircle2 className="h-8 w-8 text-navy" />
-        </motion.div>
-        <motion.h3 
-          initial={{ y: 10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.1 }}
-          className="font-serif text-3xl text-navy mb-4"
+        </div>
+        <h3 
+          className="success-text opacity-0 font-serif text-3xl text-navy mb-4"
         >
           Request Received
-        </motion.h3>
-        <motion.p 
-          initial={{ y: 10, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-slate-500 leading-relaxed mb-8"
+        </h3>
+        <p 
+          className="success-text opacity-0 text-slate-500 leading-relaxed mb-8"
         >
           Thank you, {name}. Your consultation request has been successfully routed to our triage team. You will be contacted shortly at {email}.
-        </motion.p>
-        <motion.button 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
+        </p>
+        <button 
           onClick={() => window.location.reload()}
-          className="text-[10px] uppercase tracking-[0.2em] text-navy font-semibold hover:text-navy/70 transition-colors"
+          className="success-text opacity-0 text-[10px] uppercase tracking-[0.2em] text-navy font-semibold hover:text-navy/70 transition-colors"
         >
           Return to Home
-        </motion.button>
+        </button>
       </div>
     );
   }
@@ -111,24 +142,16 @@ export function TriageForm() {
 
       {/* Progress Bar */}
       <div className="h-1 w-full bg-slate-50 mb-10 overflow-hidden">
-        <motion.div 
-          className="h-full bg-navy"
-          initial={{ width: "25%" }}
-          animate={{ width: `${(step / 4) * 100}%` }}
-          transition={{ duration: 0.3 }}
+        <div 
+          ref={progressBarRef}
+          className="h-full bg-navy w-1/4"
         />
       </div>
 
       <div className="relative min-h-[300px]">
-        <AnimatePresence mode="wait">
+        <div ref={stepContainerRef}>
           {step === 1 && (
-            <motion.div
-              key="step1"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="flex flex-col gap-4"
-            >
+            <div className="flex flex-col gap-4">
               <h4 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 mb-4">Patient Status</h4>
               {["New", "Returning"].map((opt) => (
                 <button
@@ -138,21 +161,15 @@ export function TriageForm() {
                 >
                   <span className="relative z-10 font-medium tracking-wide">{opt} Patient</span>
                   {status === opt && (
-                    <motion.div layoutId="activeStep1" className="absolute left-0 top-0 bottom-0 w-1 bg-navy" />
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-navy" />
                   )}
                 </button>
               ))}
-            </motion.div>
+            </div>
           )}
 
           {step === 2 && (
-            <motion.div
-              key="step2"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="flex flex-col gap-4"
-            >
+            <div className="flex flex-col gap-4">
               <h4 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 mb-4">Consultation Mode</h4>
               {["In-person", "Telehealth"].map((opt) => (
                 <button
@@ -162,21 +179,15 @@ export function TriageForm() {
                 >
                   <span className="relative z-10 font-medium tracking-wide">{opt}</span>
                   {mode === opt && (
-                    <motion.div layoutId="activeStep2" className="absolute left-0 top-0 bottom-0 w-1 bg-navy" />
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-navy" />
                   )}
                 </button>
               ))}
-            </motion.div>
+            </div>
           )}
 
           {step === 3 && (
-            <motion.div
-              key="step3"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="flex flex-col gap-4"
-            >
+            <div className="flex flex-col gap-4">
               <h4 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 mb-4">Primary Intent</h4>
               {["Routine", "Second Opinion", "Post-Op", "Peer Referral"].map((opt) => (
                 <button
@@ -186,21 +197,15 @@ export function TriageForm() {
                 >
                   <span className="relative z-10 font-medium tracking-wide">{opt}</span>
                   {intent === opt && (
-                    <motion.div layoutId="activeStep3" className="absolute left-0 top-0 bottom-0 w-1 bg-navy" />
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-navy" />
                   )}
                 </button>
               ))}
-            </motion.div>
+            </div>
           )}
 
           {step === 4 && (
-            <motion.div
-              key="step4"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              className="flex flex-col gap-6"
-            >
+            <div className="flex flex-col gap-6">
               <h4 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400 mb-2">Final Details</h4>
               
               {intent === "Second Opinion" && (
@@ -250,9 +255,9 @@ export function TriageForm() {
                   )}
                 </button>
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        </div>
       </div>
 
       <div className="mt-8 flex items-center justify-between border-t border-slate-100 pt-6 min-h-[40px]">
