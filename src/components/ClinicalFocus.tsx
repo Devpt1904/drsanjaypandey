@@ -14,18 +14,18 @@ export function ClinicalFocus() {
     <section className="py-24 md:py-32" id="excellence">
       <div className="mx-auto max-w-[1200px] px-8">
         <motion.div 
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-16 flex flex-col items-center text-center"
+          className="mb-20 flex flex-col items-start border-b border-slate-100 pb-8"
         >
-          <span className="mb-4 text-[11px] font-semibold uppercase tracking-[0.1em] text-slate-400">
+          <span className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
             Specializations
           </span>
           <h2 className="font-serif text-4xl text-navy md:text-5xl">Clinical Focus</h2>
         </motion.div>
         
-        <div className="grid gap-8 md:grid-cols-3">
+        <div className="grid gap-6 md:grid-cols-3">
           {focuses.map((item, index) => (
             <motion.div
               key={index}
@@ -33,19 +33,23 @@ export function ClinicalFocus() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.15, duration: 0.6 }}
-              className="group flex flex-col border border-gray-100 bg-white p-10 transition-all hover:border-gray-200 hover:shadow-sm"
+              className="group flex flex-col border border-slate-100 bg-white p-12 transition-all duration-300 hover:border-navy hover:shadow-2xl hover:shadow-navy/5 relative overflow-hidden"
             >
-              <span className="mb-8 font-serif text-3xl italic text-gray-200 transition-colors group-hover:text-navy/20">
-                {item.num}
-              </span>
-              <h3 className="mb-4 font-serif text-2xl text-navy">{item.title}</h3>
-              <p className="mb-8 flex-1 text-slate-500 leading-relaxed">
-                {item.desc}
-              </p>
-              <Link href={`/specialties/${item.slug}`} className="group/btn flex items-center gap-2 text-sm font-medium text-navy">
-                Learn More 
-                <span className="transition-transform group-hover/btn:translate-x-1">→</span>
-              </Link>
+              <div className="absolute top-0 right-0 p-8">
+                <span className="font-serif text-6xl italic text-slate-50 transition-colors duration-500 group-hover:text-navy/5">
+                  {item.num}
+                </span>
+              </div>
+              <div className="relative z-10 mt-12 flex flex-col h-full">
+                <h3 className="mb-6 font-serif text-2xl text-navy leading-tight">{item.title}</h3>
+                <p className="mb-10 flex-1 text-slate-500 leading-relaxed font-light text-sm">
+                  {item.desc}
+                </p>
+                <Link href={`/expertise`} className="group/btn inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.2em] font-semibold text-navy mt-auto">
+                  Learn More 
+                  <span className="h-[1px] w-4 bg-navy transition-all group-hover/btn:w-8" />
+                </Link>
+              </div>
             </motion.div>
           ))}
         </div>

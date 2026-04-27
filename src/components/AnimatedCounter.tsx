@@ -7,9 +7,10 @@ interface AnimatedCounterProps {
   value: number;
   label: string;
   suffix?: string;
+  dark?: boolean;
 }
 
-export function AnimatedCounter({ value, label, suffix = "" }: AnimatedCounterProps) {
+export function AnimatedCounter({ value, label, suffix = "", dark = false }: AnimatedCounterProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
   
@@ -31,11 +32,11 @@ export function AnimatedCounter({ value, label, suffix = "" }: AnimatedCounterPr
 
   return (
     <div ref={ref} className="flex flex-col items-start">
-      <div className="flex items-baseline text-navy font-serif">
+      <div className={`flex items-baseline font-serif ${dark ? 'text-white' : 'text-navy'}`}>
         <motion.span className="text-4xl md:text-5xl">{displayValue}</motion.span>
         {suffix && <span className="text-3xl md:text-4xl ml-1">{suffix}</span>}
       </div>
-      <span className="text-[10px] uppercase tracking-widest text-slate-400 mt-2 font-semibold">
+      <span className={`text-[10px] uppercase tracking-widest mt-2 font-semibold ${dark ? 'text-white/50' : 'text-slate-400'}`}>
         {label}
       </span>
     </div>

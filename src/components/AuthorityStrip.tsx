@@ -12,8 +12,8 @@ const authorities = [
 
 export function AuthorityStrip() {
   return (
-    <div className="w-full bg-gray-50 border-y border-gray-100 py-12">
-      <div className="mx-auto grid max-w-[1200px] grid-cols-2 gap-8 px-8 md:grid-cols-4">
+    <div className="w-full bg-white border-y border-slate-100 py-16">
+      <div className="mx-auto grid max-w-[1200px] grid-cols-2 gap-12 px-8 md:grid-cols-4 divide-x divide-slate-100/50">
         {authorities.map((item, index) => {
           const Icon = item.icon;
           return (
@@ -23,10 +23,10 @@ export function AuthorityStrip() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
-              className="flex flex-col items-center justify-center gap-4 text-center"
+              className="flex flex-col items-center justify-center gap-6 text-center"
             >
-              <Icon className="h-8 w-8 text-slate-400 stroke-[1.5]" />
-              <span className="text-[11px] font-semibold uppercase tracking-[0.1em] text-slate-500">
+              <Icon className="h-6 w-6 text-navy/40 stroke-[1.5]" />
+              <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-500">
                 {item.text}
               </span>
             </motion.div>

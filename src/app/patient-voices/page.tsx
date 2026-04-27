@@ -2,7 +2,6 @@
 
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { useState } from "react";
 import { PlayCircle } from "lucide-react";
 
 const testimonials = [
@@ -17,10 +16,6 @@ const testimonials = [
 ];
 
 export default function PatientVoicesPage() {
-  const [filter, setFilter] = useState("All");
-
-  const filtered = filter === "All" ? testimonials : testimonials.filter((t) => t.type === filter.toLowerCase());
-
   return (
     <>
       <Header />
@@ -33,22 +28,8 @@ export default function PatientVoicesPage() {
             </p>
           </div>
 
-          <div className="flex justify-center gap-4 mb-16">
-            {["All", "Video", "Written"].map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setFilter(cat)}
-                className={`px-6 py-2 text-xs font-semibold uppercase tracking-widest transition-colors ${
-                  filter === cat ? "bg-navy text-white" : "bg-white border border-gray-200 text-slate-500 hover:border-navy hover:text-navy"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filtered.map((item) => (
+            {testimonials.map((item) => (
               <div key={item.id} className="bg-white border border-gray-100 shadow-sm overflow-hidden flex flex-col">
                 {item.type === "video" && (
                   <div className="relative aspect-video bg-gray-200 flex-shrink-0 flex items-center justify-center">
