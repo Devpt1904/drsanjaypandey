@@ -40,8 +40,27 @@ export function ClinicalFocus() {
   }, [isInView]);
 
   return (
-    <section ref={ref} className="py-24 md:py-32" id="excellence">
-      <div className="mx-auto max-w-[1200px] px-8">
+    <section ref={ref} className="py-24 md:py-32 relative overflow-hidden" id="excellence">
+      {/* Animated orbs — section has no bg-color so these show against body white */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+        <div
+          className="absolute -top-[200px] -right-[150px] h-[700px] w-[700px] rounded-full"
+          style={{
+            background: "radial-gradient(circle, rgba(10,37,64,0.18) 0%, transparent 65%)",
+            animation: "orb-a 44s ease-in-out infinite",
+            willChange: "transform",
+          }}
+        />
+        <div
+          className="absolute -bottom-[180px] -left-[120px] h-[580px] w-[580px] rounded-full"
+          style={{
+            background: "radial-gradient(circle, rgba(71,85,105,0.14) 0%, transparent 65%)",
+            animation: "orb-b 52s ease-in-out infinite",
+            willChange: "transform",
+          }}
+        />
+      </div>
+      <div className="mx-auto max-w-[1200px] px-8 relative z-10">
 
         <div className="clinical-header opacity-0 mb-20 flex flex-col items-start border-b border-slate-100 pb-8">
           <span className="mb-4 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
@@ -88,7 +107,7 @@ export function ClinicalFocus() {
             </div>
           ))}
         </div>
-      </div>
+      </div> {/* max-w container */}
     </section>
   );
 }

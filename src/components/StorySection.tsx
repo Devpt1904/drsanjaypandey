@@ -22,8 +22,28 @@ export function StorySection() {
   }, [isInView]);
 
   return (
-    <section ref={ref} className="py-24 md:py-40 bg-white">
-      <div className="mx-auto max-w-[1200px] px-6 md:px-8">
+    <section ref={ref} className="py-24 md:py-40 relative overflow-hidden">
+      {/* Orbs at section level — no inner wrapper clip */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-[120px] -left-[180px] h-[700px] w-[700px] rounded-full"
+        style={{
+          background: "radial-gradient(circle, rgba(10,37,64,0.16) 0%, transparent 62%)",
+          animation: "orb-b 48s ease-in-out infinite",
+          willChange: "transform",
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -bottom-[150px] -right-[100px] h-[550px] w-[550px] rounded-full"
+        style={{
+          background: "radial-gradient(circle, rgba(71,85,105,0.12) 0%, transparent 62%)",
+          animation: "orb-a 55s ease-in-out infinite",
+          willChange: "transform",
+        }}
+      />
+
+      <div className="relative z-10 mx-auto max-w-[1200px] px-6 md:px-8">
 
         {/* Section header */}
         <div className="story-stagger opacity-0 mb-16 md:mb-24 flex flex-col md:flex-row md:items-end md:justify-between gap-6 border-b border-slate-100 pb-10">

@@ -5,8 +5,6 @@ import { useEffect } from "react";
 import { useAnimeInView } from "../hooks/useAnimeInView";
 
 const QUOTE = "Mastery is not simply the absence of error, but the presence of absolute intention.";
-
-// Split into words once at module level — stable reference, no re-render cost
 const words = QUOTE.split(" ");
 
 export function QuoteSection() {
@@ -14,7 +12,6 @@ export function QuoteSection() {
 
   useEffect(() => {
     if (isInView) {
-      // Word-by-word stagger reveal (reactbits text animation pattern)
       anime({
         targets: ".quote-word",
         opacity: [0, 1],
@@ -23,7 +20,6 @@ export function QuoteSection() {
         easing: "easeOutQuart",
         duration: 500,
       });
-
       anime({
         targets: ".quote-cite",
         opacity: [0, 1],
@@ -36,11 +32,24 @@ export function QuoteSection() {
   }, [isInView]);
 
   return (
-    <section ref={ref} className="py-32 bg-white">
-      <div className="mx-auto flex max-w-[960px] flex-col items-center px-8 text-center">
-        {/* Opening mark */}
+    <section ref={ref} className="py-32 relative overflow-hidden">
+
+      {/* Orb sits at section level — NOT inside the content z-10 div */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute top-1/2 left-1/2 h-[800px] w-[800px] rounded-full"
+        style={{
+          transform: "translate(-50%, -50%)",
+          background: "radial-gradient(circle, rgba(10,37,64,0.16) 0%, transparent 62%)",
+          animation: "orb-c 58s ease-in-out infinite",
+          willChange: "transform",
+        }}
+      />
+
+      {/* Content above orb */}
+      <div className="relative z-10 mx-auto flex max-w-[960px] flex-col items-center px-8 text-center">
         <span
-          className="quote-cite opacity-0 font-serif text-7xl text-navy/10 leading-none mb-0 -mb-6 select-none"
+          className="quote-cite opacity-0 font-serif text-7xl text-navy/10 leading-none -mb-4 select-none"
           aria-hidden="true"
         >
           &ldquo;
@@ -48,10 +57,7 @@ export function QuoteSection() {
 
         <blockquote className="mb-10 font-serif text-3xl italic leading-[1.35] text-navy md:text-4xl lg:text-5xl">
           {words.map((word, i) => (
-            <span
-              key={i}
-              className="quote-word opacity-0 inline-block mr-[0.25em] last:mr-0"
-            >
+            <span key={i} className="quote-word opacity-0 inline-block mr-[0.25em] last:mr-0">
               {word}
             </span>
           ))}
