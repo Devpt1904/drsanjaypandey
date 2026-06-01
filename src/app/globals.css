@@ -6,6 +6,48 @@
   --color-navy: #0a2540;
   --font-sans: var(--font-inter);
   --font-serif: var(--font-playfair);
+
+  /* Marquee animations */
+  --animate-marquee: marquee 36s linear infinite;
+  --animate-marquee-slow: marquee 56s linear infinite;
+
+  /* Shine sweep */
+  --animate-shine: shine 0.75s ease forwards;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes shine {
+  from { transform: translateX(-120%) skewX(-15deg); }
+  to   { transform: translateX(320%) skewX(-15deg); }
+}
+
+/* ── Spotlight card ──────────────────────────────────────────────
+   Tracks mouse position via --sx / --sy CSS vars set by JS.
+   Zero re-renders: reads & writes CSS variables directly on DOM.   */
+.spotlight-card {
+  --sx: 50%;
+  --sy: 50%;
+}
+.spotlight-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: radial-gradient(
+    260px circle at var(--sx) var(--sy),
+    rgba(10, 37, 64, 0.055),
+    transparent 80%
+  );
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+.spotlight-card:hover::after {
+  opacity: 1;
 }
 
 body {

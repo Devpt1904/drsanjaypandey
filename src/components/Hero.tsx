@@ -43,7 +43,18 @@ export function Hero() {
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
         
         <div className="relative z-10">
-          <span 
+          {/* Live availability badge — pure Tailwind animate-ping, zero JS */}
+          <div className="hero-stagger-item opacity-0 flex items-center gap-2.5 mb-5">
+            <span className="relative flex h-2 w-2" aria-hidden="true">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-70" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+            </span>
+            <span className="text-[9px] uppercase tracking-[0.25em] text-white/40 font-semibold">
+              Now Accepting Patients
+            </span>
+          </div>
+
+          <span
             className="hero-stagger-item opacity-0 text-[10px] uppercase tracking-[0.2em] text-white/50 font-semibold mb-6 block"
           >
             Director of Urology • MBBS, MS, MCh, DNB, FEBU
@@ -82,10 +93,19 @@ export function Hero() {
       >
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
         
-        <div className="aspect-[3/4] w-full max-w-md mx-auto bg-white overflow-hidden border border-slate-200 relative group shadow-2xl shadow-navy/5">
-          {/* PLACEHOLDER: Client to provide high-res professional portrait */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-slate-100 to-white flex items-center justify-center">
-             <span className="text-slate-400 font-serif italic text-xl">Dr. Sanjay Pandey</span>
+        <div className="aspect-[3/4] w-full max-w-md mx-auto bg-navy overflow-hidden border border-slate-200 relative group shadow-2xl shadow-navy/10">
+          <img
+            src="/pic 2.jpeg"
+            alt="Dr. Sanjay Pandey — Director of Urology, Kokilaben Dhirubhai Ambani Hospital"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            style={{ objectPosition: "48% 8%" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-navy/60 via-transparent to-transparent" />
+          <div className="absolute bottom-0 left-0 right-0 p-8">
+            <p className="text-[9px] uppercase tracking-[0.2em] text-white/60 font-semibold">
+              Kokilaben Dhirubhai Ambani Hospital
+            </p>
+            <p className="text-sm text-white/80 font-serif mt-1 leading-snug">Mumbai, India</p>
           </div>
         </div>
       </div>

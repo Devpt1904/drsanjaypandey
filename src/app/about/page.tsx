@@ -60,6 +60,21 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {/* Photo strip */}
+        <div className="w-full overflow-hidden bg-slate-50 border-b border-slate-100">
+          <div className="flex gap-0">
+            <div className="w-1/3 aspect-video overflow-hidden">
+              <img src="/pic 4.jpeg" alt="Dr. Sanjay Pandey — Transforming Urology lecture" className="w-full h-full object-cover" style={{ objectPosition: "50% 18%" }} />
+            </div>
+            <div className="w-1/3 aspect-video overflow-hidden">
+              <img src="/pic 5.jpeg" alt="Dr. Sanjay Pandey — AI in clinical care" className="w-full h-full object-cover" style={{ objectPosition: "22% 15%" }} />
+            </div>
+            <div className="w-1/3 aspect-video overflow-hidden">
+              <img src="/pic 3.jpeg" alt="Dr. Sanjay Pandey — Mumbai Urology Society" className="w-full h-full object-cover" style={{ objectPosition: "42% 5%" }} />
+            </div>
+          </div>
+        </div>
+
         {/* Philosophy & Timeline */}
         <section ref={contentRef} className="py-16 md:py-32">
           <div className="mx-auto max-w-[1200px] px-6 md:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
